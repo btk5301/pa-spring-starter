@@ -3,10 +3,7 @@ package com.galvanize.tmo.paspringstarter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/books")
@@ -21,6 +18,7 @@ public class LibraryController {
     }
 
     @PostMapping()
+    @ResponseStatus(value = HttpStatus.CREATED)
     public Book addNewBook(@RequestBody Book book) {
         book.setId(idNum);
         idNum += 1;
@@ -29,9 +27,11 @@ public class LibraryController {
     }
 
     @GetMapping()
-    public List<Book> getAllBooks() {
+    public Map<String, List<Book>> getAllBooks() {
         Collections.sort(books, (o1, o2) -> o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase()));
-        return books;
+        HashMap<String, List<Book>> map = new HashMap<>();
+        map.put("books", books);
+        return map;
     }
 
     @DeleteMapping()
